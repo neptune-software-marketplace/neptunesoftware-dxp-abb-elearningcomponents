@@ -9,26 +9,26 @@
 	},
 	"name": "neptunesoftware-dxp-abb-elearningcomponents",
 	"description": null,
-	"ver": "22.8.3.753",
+	"ver": "22.11.14.104",
 	"enableCICD": true,
 	"apps": [
 		{
+			"id": "CC45E9FB-0164-ED11-ADE6-000D3AB237DF",
+			"ver": "22.11.14.1054",
+			"application": "elearningapp2content",
+			"title": "",
+			"description": ""
+		},
+		{
 			"id": "30C32AEC-BB31-4826-88B0-5AC8F39D3CDA",
-			"ver": "22.8.3.952",
+			"ver": "22.11.14.1055",
 			"application": "elearningapp3content",
 			"title": "",
 			"description": ""
 		},
 		{
-			"id": "1777531B-F979-41F8-AE48-78D57C9930C2",
-			"ver": "22.8.3.951",
-			"application": "elearningapp2components",
-			"title": "",
-			"description": ""
-		},
-		{
 			"id": "FF729D61-5287-47DA-97BC-FC9DEBEA9F1E",
-			"ver": "22.8.3.950",
+			"ver": "22.11.14.1054",
 			"application": "elearningapp1content",
 			"title": "",
 			"description": ""
