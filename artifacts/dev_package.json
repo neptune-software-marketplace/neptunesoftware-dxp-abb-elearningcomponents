@@ -9,7 +9,7 @@
 	},
 	"name": "neptunesoftware-dxp-abb-elearningcomponents",
 	"description": null,
-	"ver": "22.11.14.104",
+	"ver": "22.11.14.107",
 	"enableCICD": true,
 	"apps": [
 		{
