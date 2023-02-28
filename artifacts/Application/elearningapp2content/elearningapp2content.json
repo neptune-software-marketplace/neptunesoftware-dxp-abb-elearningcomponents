@@ -1,9 +1,7 @@
 {
 	"id": "cc45e9fb-0164-ed11-ade6-000d3ab237df",
 	"createdAt": "2022-11-14T09:52:03.360Z",
-	"updatedAt": "2022-11-14T09:54:23.836Z",
 	"createdBy": "lloyd.trevarthen@neptune-software.com",
-	"changedBy": "lloyd.trevarthen@neptune-software.com",
 	"objects": [
 		{
 			"fieldNo": 99999,
@@ -14,6 +12,7 @@
 					"fieldParent": 99999,
 					"fieldType": "neptune.folder",
 					"script": "",
+					"customComponent": false,
 					"request": [],
 					"response": [],
 					"attributes": [],
@@ -23,120 +22,8 @@
 							"fieldName": "oJavascriptFunctions",
 							"fieldParent": "e4ecfe1b-3d33-4e91-f67a-ca51367be918",
 							"fieldType": "neptune.Script",
-							"script": [
-								"==OBJECT STRING==",
-								"// --- PDF Handling ---",
-								"//To display the pdf we need to represent it as a data URL.",
-								"function createDataURL(pdf){",
-								"    //Register BLOBs on the application.",
-								"    jQuery.sap.addUrlWhitelist(\"blob\");",
-								"    //convert the base64 to binary and insert it in a byte array.",
-								"    var decodedPdfContent = atob(pdf);",
-								"    var byteArray = new Uint8Array(decodedPdfContent.length)",
-								"    for(var i=0; i<decodedPdfContent.length; i++){",
-								"        byteArray[i] = decodedPdfContent.charCodeAt(i);",
-								"    }",
-								"    //create a BLOB and a URL",
-								"    var blob = new Blob([byteArray.buffer], { type: 'application/pdf' });",
-								"    var pdfurl = URL.createObjectURL(blob);",
-								"",
-								"    return pdfurl;",
-								"}",
-								"",
-								"function updateEquipment(){",
-								"    ",
-								"    // Clear all current ValueStates",
-								"    inputName.setValueState(\"None\");",
-								"    inputPN.setValueState(\"None\");",
-								"    inputLat.setValueState(\"None\");",
-								"    inputLong.setValueState(\"None\");",
-								"    datePickerCheckup.setValueState(\"None\");",
-								"",
-								"    // **** VALIDATION SECTION ******",
-								"    if (inputName.getValue() === \"\"){inputName.setValueState(\"Error\"),sap.m.MessageToast.show(\"Please provide a Name\");return};",
-								"    if (inputPN.getValue() === \"\"){inputPN.setValueState(\"Error\"),sap.m.MessageToast.show(\"Please provide a Part Number\");return};",
-								"    if (inputLat.getValue() === \"\"){inputLat.setValueState(\"Error\"),sap.m.MessageToast.show(\"Please provide a Latitude\");return};",
-								"    if (inputLong.getValue() === \"\"){inputLong.setValueState(\"Error\"),sap.m.MessageToast.show(\"Please provide a Longitude\");return};",
-								"    if (datePickerCheckup.getValue() === \"\"){datePickerCheckup.setValueState(\"Error\"),sap.m.MessageToast.show(\"Please provide a Installation Date\");return};",
-								"    if (sliderInterval.getValue() === 0){sap.m.MessageToast.show(\"Please provide a Service Interval\");return};",
-								"",
-								"    let final_data = {}",
-								"",
-								"    // Get ID from the page model",
-								"    // (This is set when equipment is selected on the 'mainListPage')",
-								"    final_data.id = modelequipmentDetailPage.getData().id;",
-								"",
-								"    // --- Including the ID in the data object, allows the API to know which record to update",
-								"    // --- If you don't include the ID, the PUT API won't find a record, so will create a new one!",
-								"",
-								"    // Get the rest of the values from the SimpleForms",
-								"    final_data.name = inputName.getValue();",
-								"    final_data.part_number = inputPN.getValue();",
-								"    final_data.latitude = inputLat.getValue();",
-								"    final_data.longitude = inputLong.getValue();",
-								"    final_data.checkup_date = datePickerCheckup.getValue();",
-								"    final_data.checkup_interval = sliderInterval.getValue();",
-								"",
-								"    console.log(\"--- final_data sent via Update API ---\");",
-								"    console.log(final_data);",
-								"",
-								"    var options = {",
-								"        data: final_data",
-								"    };",
-								"",
-								"    apiupdateEquipment(options);",
-								"",
-								"    lockUnlock();",
-								"}",
-								"",
-								"// --- Used on equipmentDetailPage ---",
-								"function lockUnlock(){",
-								"    if (oButtonLockUnlock.getType() === \"Reject\") {",
-								"",
-								"        oButtonLockUnlock.setType(\"Accept\");",
-								"        oButtonLockUnlock.setIcon(\"sap-icon://fa-solid/lock-open\");",
-								"",
-								"        oButtonAssignCheckToWorker.setEnabled(false);",
-								"        equipmentDetailPage.setShowNavButton(false);",
-								"",
-								"        inputName.setEditable(true);",
-								"        inputPN.setEditable(true);",
-								"        inputLat.setEditable(true);",
-								"        inputLong.setEditable(true);",
-								"        datePickerCheckup.setEditable(true);",
-								"",
-								"        sliderInterval.setEnabled(true);",
-								"        buttonUpdateInformation.setEnabled(true);",
-								"",
-								"    } else {",
-								"",
-								"        oButtonLockUnlock.setType(\"Reject\");",
-								"        oButtonLockUnlock.setIcon(\"sap-icon://fa-solid/lock\");",
-								"",
-								"        oButtonAssignCheckToWorker.setEnabled(true);",
-								"        equipmentDetailPage.setShowNavButton(true);",
-								"",
-								"        inputName.setEditable(false);",
-								"        inputPN.setEditable(false);",
-								"        inputLat.setEditable(false);",
-								"        inputLong.setEditable(false);",
-								"        datePickerCheckup.setEditable(false);",
-								"",
-								"        sliderInterval.setEnabled(false);",
-								"        buttonUpdateInformation.setEnabled(false);",
-								"    }",
-								"};",
-								"",
-								"function findAllFieldWorkers(){",
-								"    var options = {",
-								"        data: {\"id\":\"Your Field Worker group ID here!\"}",
-								"    };",
-								"",
-								"    apigetListOfFieldWorkers(options);",
-								"",
-								"    oDialogAssign.open();",
-								"}"
-							],
+							"script": "file://script/neptune.Script/eLearningApp2Content/oJavascriptFunctions.js",
+							"customComponent": false,
 							"request": [],
 							"response": [],
 							"attributes": [],
@@ -148,6 +35,7 @@
 							"fieldParent": "e4ecfe1b-3d33-4e91-f67a-ca51367be918",
 							"fieldType": "neptune.folder",
 							"script": "",
+							"customComponent": false,
 							"request": [],
 							"response": [],
 							"attributes": [],
@@ -158,6 +46,7 @@
 									"fieldParent": "5d32e150-07e8-4fd2-ce64-c3e1f8d9f331",
 									"fieldType": "sap.m.HBox",
 									"script": "",
+									"customComponent": false,
 									"request": [],
 									"response": [],
 									"attributes": [
@@ -176,6 +65,7 @@
 											"fieldParent": "ce4296aa-2123-4e15-b505-df8ac25da415",
 											"fieldType": "sap.m.VBox",
 											"script": "",
+											"customComponent": false,
 											"request": [],
 											"response": [],
 											"attributes": [],
@@ -186,6 +76,7 @@
 													"fieldParent": "8412e84b-ba04-4468-b65b-53f46b086feb",
 													"fieldType": "sap.m.Title",
 													"script": "",
+													"customComponent": false,
 													"request": [],
 													"response": [],
 													"attributes": [
@@ -214,6 +105,7 @@
 											"fieldParent": "ce4296aa-2123-4e15-b505-df8ac25da415",
 											"fieldType": "sap.m.HBox",
 											"script": "",
+											"customComponent": false,
 											"request": [],
 											"response": [],
 											"attributes": [
@@ -239,6 +131,7 @@
 													"fieldParent": "24219247-d36f-4472-9795-07d8348f04f8",
 													"fieldType": "sap.m.Title",
 													"script": "",
+													"customComponent": false,
 													"request": [],
 													"response": [],
 													"attributes": [
@@ -269,6 +162,7 @@
 									"fieldParent": "5d32e150-07e8-4fd2-ce64-c3e1f8d9f331",
 									"fieldType": "sap.m.ScrollContainer",
 									"script": "",
+									"customComponent": false,
 									"request": [],
 									"response": [],
 									"attributes": [
@@ -318,6 +212,7 @@
 							"fieldParent": "e4ecfe1b-3d33-4e91-f67a-ca51367be918",
 							"fieldType": "sap.m.Page",
 							"script": "",
+							"customComponent": false,
 							"bindingValue": "API equipment>equipment",
 							"bindingType": "u",
 							"bindingSource": "API",
@@ -344,19 +239,7 @@
 									"attribute": "navButtonPress",
 									"grouping": "Events",
 									"value": "Anonymous Function",
-									"script": [
-										"==OBJECT STRING==",
-										"sap.m.MessageToast.show(\"Refreshing...\");",
-										"",
-										"oApp.backToPage(mainListPage);",
-										"",
-										"// Reset page",
-										"oPanelDocuments.setVisible(false);",
-										"",
-										"//apigetEquipmentInfo();",
-										"",
-										"apitriggerDaysLeftScript();"
-									],
+									"script": "file://event/sap.m.Page/equipmentDetailPage/navButtonPress.script",
 									"translation": []
 								}
 							],
@@ -367,6 +250,7 @@
 									"fieldParent": "534ae674-60ab-4496-9e03-d190db85002f",
 									"fieldType": "sap.m.Panel",
 									"script": "",
+									"customComponent": false,
 									"request": [],
 									"response": [],
 									"attributes": [
@@ -392,6 +276,7 @@
 											"fieldParent": "5c8928d9-71f2-415f-d000-84e762127202",
 											"fieldType": "sap.ui.layout.form.SimpleForm",
 											"script": "",
+											"customComponent": false,
 											"request": [],
 											"response": [],
 											"attributes": [
@@ -410,6 +295,7 @@
 													"fieldParent": "e6e23732-8ce3-4b54-9234-1fb28b9ee044",
 													"fieldType": "sap.m.Label",
 													"script": "",
+													"customComponent": false,
 													"request": [],
 													"response": [],
 													"attributes": [
@@ -436,6 +322,7 @@
 													"fieldParent": "e6e23732-8ce3-4b54-9234-1fb28b9ee044",
 													"fieldType": "sap.m.Input",
 													"script": "",
+													"customComponent": false,
 													"request": [],
 													"response": [],
 													"attributes": [
@@ -469,6 +356,7 @@
 													"fieldParent": "e6e23732-8ce3-4b54-9234-1fb28b9ee044",
 													"fieldType": "sap.m.Label",
 													"script": "",
+													"customComponent": false,
 													"request": [],
 													"response": [],
 													"attributes": [
@@ -495,6 +383,7 @@
 													"fieldParent": "e6e23732-8ce3-4b54-9234-1fb28b9ee044",
 													"fieldType": "sap.m.Input",
 													"script": "",
+													"customComponent": false,
 													"request": [],
 													"response": [],
 													"attributes": [
@@ -528,6 +417,7 @@
 													"fieldParent": "e6e23732-8ce3-4b54-9234-1fb28b9ee044",
 													"fieldType": "sap.m.Label",
 													"script": "",
+													"customComponent": false,
 													"request": [],
 													"response": [],
 													"attributes": [
@@ -554,6 +444,7 @@
 													"fieldParent": "e6e23732-8ce3-4b54-9234-1fb28b9ee044",
 													"fieldType": "sap.m.HBox",
 													"script": "",
+													"customComponent": false,
 													"request": [],
 													"response": [],
 													"attributes": [
@@ -579,6 +470,7 @@
 															"fieldParent": "a237b012-9dbd-421c-cd3a-efc6b888d558",
 															"fieldType": "sap.m.Input",
 															"script": "",
+															"customComponent": false,
 															"request": [],
 															"response": [],
 															"attributes": [
@@ -619,6 +511,7 @@
 															"fieldParent": "a237b012-9dbd-421c-cd3a-efc6b888d558",
 															"fieldType": "sap.m.Input",
 															"script": "",
+															"customComponent": false,
 															"request": [],
 															"response": [],
 															"attributes": [
@@ -658,6 +551,7 @@
 									"fieldParent": "534ae674-60ab-4496-9e03-d190db85002f",
 									"fieldType": "sap.m.Panel",
 									"script": "",
+									"customComponent": false,
 									"request": [],
 									"response": [],
 									"attributes": [
@@ -676,6 +570,7 @@
 											"fieldParent": "7a5a7ede-71d9-484f-d192-916174a2b0bc",
 											"fieldType": "sap.ui.layout.form.SimpleForm",
 											"script": "",
+											"customComponent": false,
 											"request": [],
 											"response": [],
 											"attributes": [
@@ -694,6 +589,7 @@
 													"fieldParent": "16a9f01a-0838-4460-c63d-ea121bbc0830",
 													"fieldType": "sap.m.Label",
 													"script": "",
+													"customComponent": false,
 													"request": [],
 													"response": [],
 													"attributes": [
@@ -720,6 +616,7 @@
 													"fieldParent": "16a9f01a-0838-4460-c63d-ea121bbc0830",
 													"fieldType": "sap.m.DatePicker",
 													"script": "",
+													"customComponent": false,
 													"request": [],
 													"response": [],
 													"attributes": [
@@ -774,6 +671,7 @@
 													"fieldParent": "16a9f01a-0838-4460-c63d-ea121bbc0830",
 													"fieldType": "sap.m.Label",
 													"script": "",
+													"customComponent": false,
 													"request": [],
 													"response": [],
 													"attributes": [
@@ -800,6 +698,7 @@
 													"fieldParent": "16a9f01a-0838-4460-c63d-ea121bbc0830",
 													"fieldType": "sap.m.Slider",
 													"script": "",
+													"customComponent": false,
 													"request": [],
 													"response": [],
 													"attributes": [
@@ -842,16 +741,7 @@
 															"attribute": "liveChange",
 															"grouping": "Events",
 															"value": "Anonymous Function",
-															"script": [
-																"==OBJECT STRING==",
-																"this.getValue() == 1 ? ",
-																"    labelDays.setText(\"Service interval - 1 Day\")",
-																"    :",
-																"    labelDays.setText(\"Service interval - \"+`${this.getValue()} days`)",
-																"",
-																"",
-																""
-															],
+															"script": "file://event/sap.m.Slider/sliderInterval/liveChange.script",
 															"translation": []
 														}
 													],
@@ -867,6 +757,7 @@
 									"fieldParent": "534ae674-60ab-4496-9e03-d190db85002f",
 									"fieldType": "sap.m.Panel",
 									"script": "",
+									"customComponent": false,
 									"request": [],
 									"response": [],
 									"attributes": [
@@ -892,6 +783,7 @@
 											"fieldParent": "c166954d-ae23-4a75-afe0-e790b0d73ba7",
 											"fieldType": "sap.m.PDFViewer",
 											"script": "",
+											"customComponent": false,
 											"request": [],
 											"response": [],
 											"attributes": [
@@ -920,6 +812,7 @@
 									"fieldParent": "534ae674-60ab-4496-9e03-d190db85002f",
 									"fieldType": "sap.m.Bar",
 									"script": "",
+									"customComponent": false,
 									"request": [],
 									"response": [],
 									"attributes": [
@@ -938,6 +831,7 @@
 											"fieldParent": "65f49a1d-cecc-465c-8a74-cfc006d82231",
 											"fieldType": "neptune.BarContent",
 											"script": "",
+											"customComponent": false,
 											"request": [],
 											"response": [],
 											"attributes": [
@@ -956,6 +850,7 @@
 													"fieldParent": "f06b6a6e-d656-4f0e-c767-eb01784b3b44",
 													"fieldType": "sap.m.HBox",
 													"script": "",
+													"customComponent": false,
 													"request": [],
 													"response": [],
 													"attributes": [
@@ -988,6 +883,7 @@
 															"fieldParent": "cfbc4503-cccf-49b4-b99a-cfe63a7b26ae",
 															"fieldType": "sap.m.Button",
 															"script": "",
+															"customComponent": false,
 															"request": [],
 															"response": [],
 															"attributes": [
@@ -1016,11 +912,7 @@
 																	"attribute": "press",
 																	"grouping": "Events",
 																	"value": "Anonymous Function",
-																	"script": [
-																		"==OBJECT STRING==",
-																		"//",
-																		"findAllFieldWorkers();"
-																	],
+																	"script": "file://event/sap.m.Button/oButtonAssignCheckToWorker/press.script",
 																	"translation": []
 																}
 															],
@@ -1032,6 +924,7 @@
 															"fieldParent": "cfbc4503-cccf-49b4-b99a-cfe63a7b26ae",
 															"fieldType": "sap.m.Button",
 															"script": "",
+															"customComponent": false,
 															"request": [],
 															"response": [],
 															"attributes": [
@@ -1060,11 +953,7 @@
 																	"attribute": "press",
 																	"grouping": "Events",
 																	"value": "Anonymous Function",
-																	"script": [
-																		"==OBJECT STRING==",
-																		"//",
-																		"lockUnlock();"
-																	],
+																	"script": "file://event/sap.m.Button/oButtonLockUnlock/press.script",
 																	"translation": []
 																}
 															],
@@ -1076,6 +965,7 @@
 															"fieldParent": "cfbc4503-cccf-49b4-b99a-cfe63a7b26ae",
 															"fieldType": "sap.m.Button",
 															"script": "",
+															"customComponent": false,
 															"request": [],
 															"response": [],
 															"attributes": [
@@ -1104,11 +994,7 @@
 																	"attribute": "press",
 																	"grouping": "Events",
 																	"value": "Anonymous Function",
-																	"script": [
-																		"==OBJECT STRING==",
-																		"//",
-																		"updateEquipment();"
-																	],
+																	"script": "file://event/sap.m.Button/buttonUpdateInformation/press.script",
 																	"translation": []
 																}
 															],
@@ -1122,6 +1008,7 @@
 													"fieldParent": "f06b6a6e-d656-4f0e-c767-eb01784b3b44",
 													"fieldType": "sap.m.HBox",
 													"script": "",
+													"customComponent": false,
 													"bindingType": "u",
 													"request": [],
 													"response": [],
@@ -1155,6 +1042,7 @@
 															"fieldParent": "99cb7b0c-ad11-4a0e-ef9c-562e2ce52267",
 															"fieldType": "sap.m.Text",
 															"script": "",
+															"customComponent": false,
 															"request": [],
 															"response": [],
 															"attributes": [
@@ -1182,6 +1070,7 @@
 							"fieldParent": "e4ecfe1b-3d33-4e91-f67a-ca51367be918",
 							"fieldType": "neptune.folder",
 							"script": "",
+							"customComponent": false,
 							"request": [],
 							"response": [],
 							"attributes": [],
@@ -1192,6 +1081,7 @@
 									"fieldParent": "89277b75-eca0-472c-ee53-54a047ccd1ab",
 									"fieldType": "sap.m.Dialog",
 									"script": "",
+									"customComponent": false,
 									"request": [],
 									"response": [],
 									"attributes": [
@@ -1210,6 +1100,7 @@
 											"fieldParent": "94372340-8587-40f4-8835-48619939c371",
 											"fieldType": "sap.m.Bar",
 											"script": "",
+											"customComponent": false,
 											"request": [],
 											"response": [],
 											"attributes": [
@@ -1228,6 +1119,7 @@
 													"fieldParent": "3d387369-2408-483a-8c46-43b85cd81d8f",
 													"fieldType": "neptune.BarContent",
 													"script": "",
+													"customComponent": false,
 													"request": [],
 													"response": [],
 													"attributes": [
@@ -1246,6 +1138,7 @@
 															"fieldParent": "73d2c554-3f03-4d69-d0bf-1d670609f3c3",
 															"fieldType": "sap.m.Title",
 															"script": "",
+															"customComponent": false,
 															"request": [],
 															"response": [],
 															"attributes": [
@@ -1267,6 +1160,7 @@
 													"fieldParent": "3d387369-2408-483a-8c46-43b85cd81d8f",
 													"fieldType": "neptune.BarContent",
 													"script": "",
+													"customComponent": false,
 													"request": [],
 													"response": [],
 													"attributes": [
@@ -1285,6 +1179,7 @@
 															"fieldParent": "e3e62fee-a51f-42db-c577-4218806ed276",
 															"fieldType": "sap.m.Button",
 															"script": "",
+															"customComponent": false,
 															"request": [],
 															"response": [],
 															"attributes": [
@@ -1322,6 +1217,7 @@
 											"fieldParent": "94372340-8587-40f4-8835-48619939c371",
 											"fieldType": "sap.m.HBox",
 											"script": "",
+											"customComponent": false,
 											"request": [],
 											"response": [],
 											"attributes": [
@@ -1347,6 +1243,7 @@
 													"fieldParent": "cf036f2b-c2fd-4c49-d3f2-9a8e3fe24f4f",
 													"fieldType": "sap.m.Select",
 													"script": "",
+													"customComponent": false,
 													"bindingType": "h",
 													"request": [],
 													"response": [],
@@ -1358,6 +1255,7 @@
 															"fieldParent": "4e645da1-99f9-4817-f583-29739e62d13a",
 															"fieldType": "sap.ui.core.ListItem",
 															"script": "",
+															"customComponent": false,
 															"request": [],
 															"response": [],
 															"attributes": [],
@@ -1371,6 +1269,7 @@
 													"fieldParent": "cf036f2b-c2fd-4c49-d3f2-9a8e3fe24f4f",
 													"fieldType": "sap.m.Button",
 													"script": "",
+													"customComponent": false,
 													"request": [],
 													"response": [],
 													"attributes": [
@@ -1420,7 +1319,8 @@
 			"data": []
 		}
 	],
-	"ver": "22.11.14.1054",
+	"componentInterface": [],
+	"ver": "23.2.28.1122",
 	"application": "elearningapp2content",
 	"title": "",
 	"description": "",
@@ -1432,7 +1332,7 @@
 	"disabled": false,
 	"loadLaunchpadCode": null,
 	"loadApplicationCode": null,
-	"appType": "",
+	"appType": "C",
 	"ui5_m": true,
 	"ui5_f": false,
 	"ui5_table": false,
@@ -1442,8 +1342,10 @@
 	"ui5_theme": "sap_fiori_3",
 	"ui5_version": "",
 	"ui5_language": null,
+	"ui5_url": "",
 	"cus_theme": "",
 	"css": "",
+	"compiledCss": null,
 	"header": "",
 	"manifest": "",
 	"globalScript": "",
@@ -1452,5 +1354,11 @@
 	"libHighmap": false,
 	"publicAccess": false,
 	"ui5_bootstrap": false,
-	"apis": []
+	"ui5_ionic": false,
+	"useV2AppHandler": false,
+	"compilerTarget": 3,
+	"tabWidth": null,
+	"printWidth": null,
+	"apis": [],
+	"package": "6c34eaf7-0013-ed11-bd6e-000d3ab1d9ff"
 }

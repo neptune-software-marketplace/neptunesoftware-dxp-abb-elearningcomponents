@@ -1,5 +1,5 @@
 {
-	"id": "6C34EAF7-0013-ED11-BD6E-000D3AB1D9FF",
+	"id": "6c34eaf7-0013-ed11-bd6e-000d3ab1d9ff",
 	"createdAt": "2022-08-03T07:50:42.473Z",
 	"createdBy": "kristin.eliassen@neptune-software.com",
 	"git": {
@@ -13,30 +13,27 @@
 	"enableCICD": true,
 	"apps": [
 		{
-			"id": "CC45E9FB-0164-ED11-ADE6-000D3AB237DF",
-			"ver": "22.11.14.1054",
+			"id": "ff729d61-5287-47da-97bc-fc9debea9f1e",
+			"application": "elearningapp1content",
+			"title": "",
+			"description": ""
+		},
+		{
+			"id": "cc45e9fb-0164-ed11-ade6-000d3ab237df",
 			"application": "elearningapp2content",
 			"title": "",
 			"description": ""
 		},
 		{
-			"id": "30C32AEC-BB31-4826-88B0-5AC8F39D3CDA",
-			"ver": "22.11.14.1055",
+			"id": "30c32aec-bb31-4826-88b0-5ac8f39d3cda",
 			"application": "elearningapp3content",
-			"title": "",
-			"description": ""
-		},
-		{
-			"id": "FF729D61-5287-47DA-97BC-FC9DEBEA9F1E",
-			"ver": "22.11.14.1054",
-			"application": "elearningapp1content",
 			"title": "",
 			"description": ""
 		}
 	],
 	"api": [],
-	"odataMock": [],
 	"odataSource": [],
+	"odataMock": [],
 	"dictionary": [],
 	"jsclass": [],
 	"jsscript_group": [],
@@ -54,8 +51,13 @@
 	"systems": [],
 	"doc": [],
 	"wf_notifications": [],
-	"wf_definition": [],
 	"department": [],
 	"script_scheduler": [],
-	"connector": []
+	"wf_definition": [],
+	"connector": [],
+	"events": [],
+	"media_library": [],
+	"code_snippets": [],
+	"wf_determination": [],
+	"wf_taskaction": []
 }
